@@ -9,11 +9,16 @@ dotenv.config({
 
 const databaseUrl = process.env.DATABASE_URL;
 
+
 if (!databaseUrl) {
-  throw new Error(
-    "DATABASE_URL is not set. Add it as an environment variable on Render, or create a .env file locally."
+  process.stderr.write(
+    "[drizzle-config] ERROR: DATABASE_URL is not set.\n" +
+    "On Render: add DATABASE_URL in the Environment tab.\n"
   );
+  process.exit(1);  // shows message before failing, throw gets swallowed by pnpm
 }
+
+process.stdout.write("[drizzle-config] DATABASE_URL loaded ✓\n");
 
 export default defineConfig({
   out: "./drizzle",
